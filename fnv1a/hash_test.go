@@ -13,7 +13,7 @@ func TestHash64(t *testing.T) {
 				h.Write([]byte(s))
 
 				sum1 := h.Sum64()
-				sum2 := Hash64String(s)
+				sum2 := HashString64(s)
 
 				if sum1 != sum2 {
 					t.Errorf("invalid hash, expected %d but got %d", sum1, sum2)
@@ -38,7 +38,7 @@ func BenchmarkHash64(b *testing.B) {
 		},
 		{
 			scenario: "hash function",
-			function: Hash64String,
+			function: HashString64,
 		},
 	}
 
