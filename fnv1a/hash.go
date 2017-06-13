@@ -30,69 +30,25 @@ func AddString64(h uint64, s string) uint64 {
 
 	*/
 
-	for i, n := 0, len(s); i != n; {
-		switch n - i {
-		case 1:
-			h = (h ^ uint64(s[i])) * prime64
-			i += 1
+	i := 0
+	n := (len(s) / 8) * 8
 
-		case 2:
-			h = (h ^ uint64(s[i])) * prime64
-			h = (h ^ uint64(s[i+1])) * prime64
-			i += 2
-
-		case 3:
-			h = (h ^ uint64(s[i])) * prime64
-			h = (h ^ uint64(s[i+1])) * prime64
-			h = (h ^ uint64(s[i+2])) * prime64
-			i += 3
-
-		case 4:
-			h = (h ^ uint64(s[i])) * prime64
-			h = (h ^ uint64(s[i+1])) * prime64
-			h = (h ^ uint64(s[i+2])) * prime64
-			h = (h ^ uint64(s[i+3])) * prime64
-			i += 4
-
-		case 5:
-			h = (h ^ uint64(s[i])) * prime64
-			h = (h ^ uint64(s[i+1])) * prime64
-			h = (h ^ uint64(s[i+2])) * prime64
-			h = (h ^ uint64(s[i+3])) * prime64
-			h = (h ^ uint64(s[i+4])) * prime64
-			i += 5
-
-		case 6:
-			h = (h ^ uint64(s[i])) * prime64
-			h = (h ^ uint64(s[i+1])) * prime64
-			h = (h ^ uint64(s[i+2])) * prime64
-			h = (h ^ uint64(s[i+3])) * prime64
-			h = (h ^ uint64(s[i+4])) * prime64
-			h = (h ^ uint64(s[i+5])) * prime64
-			i += 6
-
-		case 7:
-			h = (h ^ uint64(s[i])) * prime64
-			h = (h ^ uint64(s[i+1])) * prime64
-			h = (h ^ uint64(s[i+2])) * prime64
-			h = (h ^ uint64(s[i+3])) * prime64
-			h = (h ^ uint64(s[i+4])) * prime64
-			h = (h ^ uint64(s[i+5])) * prime64
-			h = (h ^ uint64(s[i+6])) * prime64
-			i += 7
-
-		default:
-			h = (h ^ uint64(s[i])) * prime64
-			h = (h ^ uint64(s[i+1])) * prime64
-			h = (h ^ uint64(s[i+2])) * prime64
-			h = (h ^ uint64(s[i+3])) * prime64
-			h = (h ^ uint64(s[i+4])) * prime64
-			h = (h ^ uint64(s[i+5])) * prime64
-			h = (h ^ uint64(s[i+6])) * prime64
-			h = (h ^ uint64(s[i+7])) * prime64
-			i += 8
-		}
+	for i != n {
+		h = (h ^ uint64(s[i])) * prime64
+		h = (h ^ uint64(s[i+1])) * prime64
+		h = (h ^ uint64(s[i+2])) * prime64
+		h = (h ^ uint64(s[i+3])) * prime64
+		h = (h ^ uint64(s[i+4])) * prime64
+		h = (h ^ uint64(s[i+5])) * prime64
+		h = (h ^ uint64(s[i+6])) * prime64
+		h = (h ^ uint64(s[i+7])) * prime64
+		i += 8
 	}
+
+	for _, c := range s[i:] {
+		h = (h ^ uint64(c)) * prime64
+	}
+
 	return h
 }
 
