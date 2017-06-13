@@ -46,9 +46,9 @@ func main() {
 
     // Incrementatlly compute a hash value from a sequence of strings.
     h2 := fnv1a.Init64
-    h2 = fnv1a.AddString64("A")
-    h2 = fnv1a.AddString64("B")
-    h2 = fnv1a.AddString64("C")
+    h2 = fnv1a.AddString64(h2, "A")
+    h2 = fnv1a.AddString64(h2, "B")
+    h2 = fnv1a.AddString64(h2, "C")
     fmt.Println("FNV-1a hash of 'ABC':", h2)
 }
 ```
