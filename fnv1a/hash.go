@@ -95,3 +95,16 @@ func AddString64(h uint64, s string) uint64 {
 	}
 	return h
 }
+
+// AddUint64 adds the hash value of the 8 bytes of u to h.
+func AddUint64(h uint64, u uint64) uint64 {
+	h = (h ^ ((u >> 0) & 0xFF)) * prime64
+	h = (h ^ ((u >> 8) & 0xFF)) * prime64
+	h = (h ^ ((u >> 16) & 0xFF)) * prime64
+	h = (h ^ ((u >> 24) & 0xFF)) * prime64
+	h = (h ^ ((u >> 32) & 0xFF)) * prime64
+	h = (h ^ ((u >> 40) & 0xFF)) * prime64
+	h = (h ^ ((u >> 48) & 0xFF)) * prime64
+	h = (h ^ ((u >> 56) & 0xFF)) * prime64
+	return h
+}
