@@ -27,3 +27,28 @@ Here's an example with fnv-1a:
 BenchmarkHash64/standard_hash_function 20000000   105.0 ns/op   342.31 MB/s   56 B/op   2 allocs/op
 BenchmarkHash64/hash_function          50000000    38.6 ns/op   932.35 MB/s    0 B/op   0 allocs/op
 ```
+
+# Usage Example: FNV-1a
+
+```go
+package main
+
+import (
+    "fmt"
+
+    "github.com/segmentio/fasthash/fnv1a"
+)
+
+func main() {
+    // Hash a single string.
+    h1 := fnv1a.HashString64("Hello World!")
+    fmt.Println("FNV-1a hash of 'Hello World!':", h1)
+
+    // Incrementatlly compute a hash value from a sequence of strings.
+    h2 := fnv1a.Init64
+    h2 = fnv1a.AddString64("A")
+    h2 = fnv1a.AddString64("B")
+    h2 = fnv1a.AddString64("C")
+    fmt.Println("FNV-1a hash of 'ABC':", h2)
+}
+```
