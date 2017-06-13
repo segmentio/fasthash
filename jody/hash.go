@@ -10,7 +10,7 @@ const (
 	constant = 0x1f3d5b79
 
 	// Init64 is the what Hash64 values should be initialized with.
-	Init64 = 0
+	Init64 = uint64(0)
 )
 
 var mask64 = [...]uint64{
