@@ -1,4 +1,4 @@
-package fnv1a
+package jody
 
 import (
 	"reflect"
