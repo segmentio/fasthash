@@ -9,7 +9,7 @@ const (
 	shift    = 11
 	constant = 0x1f3d5b79
 
-	// Init64 is the what Hash64 values should be initialized with.
+	// Init64 is what 64 bits hash values should be initialized with.
 	Init64 = uint64(0)
 )
 
@@ -112,7 +112,7 @@ func AddString64(h uint64, s string) uint64 {
 // AddUint64 adds the hash value of the 8 bytes of u to h.
 func AddUint64(h uint64, u uint64) uint64 {
 	h = h + u + constant
-	h = ((h << shift) | h>>(64-shift)) ^ u
-	h = (((h << shift) | h>>(64-shift)) ^ constant) + u
+	h = (h<<shift | h>>(64-shift)) ^ u
+	h = ((h<<shift | h>>(64-shift)) ^ constant) + u
 	return h
 }

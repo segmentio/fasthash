@@ -5,7 +5,7 @@ const (
 	offset64 = uint64(14695981039346656037)
 	prime64  = uint64(1099511628211)
 
-	// Init64 is the what Hash64 values should be initialized with.
+	// Init64 is what 64 bits hash values should be initialized with.
 	Init64 = offset64
 )
 
