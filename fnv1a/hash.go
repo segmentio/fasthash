@@ -9,17 +9,17 @@ const (
 	Init64 = offset64
 )
 
-// HashString64 returns the FNV-1a hash of s.
+// HashString64 returns the hash of s.
 func HashString64(s string) uint64 {
 	return AddString64(Init64, s)
 }
 
-// HashUint64 returns the FNV-1a hash of u.
+// HashUint64 returns the hash of u.
 func HashUint64(u uint64) uint64 {
 	return AddUint64(Init64, u)
 }
 
-// AddString64 adds the FNV-1a hash of s to the precomputed hash value h.
+// AddString64 adds the hash of s to the precomputed hash value h.
 func AddString64(h uint64, s string) uint64 {
 	/*
 		This is an unrolled version of this algorithm:
