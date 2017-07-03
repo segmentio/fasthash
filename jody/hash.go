@@ -84,22 +84,22 @@ func AddString64(h uint64, s string) uint64 {
 	*/
 
 	r := *(*reflect.StringHeader)(unsafe.Pointer(&s))
-	p := r.Data
+	p := unsafe.Pointer((*reflect.StringHeader)(unsafe.Pointer(&s)).Data)
 
 	for n := r.Len / 8; n != 0; n-- {
-		v := *(*uint64)(unsafe.Pointer(p))
+		v := *(*uint64)(p)
 
 		h = h + v + constant
 		h = (h<<shift | h>>(64-shift)) ^ v
 		h = ((h<<shift | h>>(64-shift)) ^ constant) + v
 
-		p += 8
+		p = unsafe.Pointer(uintptr(p) + 8)
 	}
 
 	if n := (r.Len & 7); n != 0 {
 		m := mask64[n]
 		c := constant & m
-		v := *(*uint64)(unsafe.Pointer(p)) & m // risk of segfault here?
+		v := *(*uint64)(p) & m // risk of segfault here?
 
 		h = h + v + c
 		h = (h<<shift | h>>(64-shift)) ^ v
