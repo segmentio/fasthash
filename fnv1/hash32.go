@@ -5,7 +5,7 @@ const (
 	offset32 = uint32(2166136261)
 	prime32  = uint32(16777619)
 
-	// Init32 is what 64 bits hash values should be initialized with.
+	// Init32 is what 32 bits hash values should be initialized with.
 	Init32 = offset32
 )
 
