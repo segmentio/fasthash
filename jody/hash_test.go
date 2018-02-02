@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/segmentio/fasthash"
+	"github.com/segmentio/fasthash/fasthashtest"
 )
 
 func TestHash64(t *testing.T) {
@@ -34,10 +34,10 @@ func TestHash64(t *testing.T) {
 		return 0x0007cf56f7fc0ba3
 	}
 
-	fasthash.TestHashString64(t, "jody", referenceString64, HashString64)
-	fasthash.TestHashUint64(t, "jody", referenceUint64, HashUint64)
+	fasthashtest.TestHashString64(t, "jody", referenceString64, HashString64)
+	fasthashtest.TestHashUint64(t, "jody", referenceUint64, HashUint64)
 }
 
 func BenchmarkHash64(b *testing.B) {
-	fasthash.BenchmarkHashString64(b, "jody", nil, HashString64)
+	fasthashtest.BenchmarkHashString64(b, "jody", nil, HashString64)
 }
