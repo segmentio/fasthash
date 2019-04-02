@@ -23,6 +23,28 @@ func TestHashString32(t *testing.T, name string, reference func(string) uint32, 
 	})
 }
 
+// TestHashBytes32 is the implementation of a test suite to verify the
+// behavior of a hashing algorithm.
+func TestHashBytes32(t *testing.T, name string, reference func([]byte) uint32, algorithm func([]byte) uint32) {
+	t.Run(name, func(t *testing.T) {
+		for _, s := range [...]string{"", "A", "Hello World!", "DAB45194-42CC-4106-AB9F-2447FA4D35C2"} {
+			t.Run(s, func(t *testing.T) {
+				b := []byte(s)
+				if reference == nil {
+					algorithm(b)
+				} else {
+					sum1 := reference(b)
+					sum2 := algorithm(b)
+
+					if sum1 != sum2 {
+						t.Errorf("invalid hash, expected %x but got %x", sum1, sum2)
+					}
+				}
+			})
+		}
+	})
+}
+
 // TestHashUint32 is the implementation of a test suite to verify the
 // behavior of a hashing algorithm.
 func TestHashUint32(t *testing.T, name string, reference func(uint32) uint32, algorithm func(uint32) uint32) {

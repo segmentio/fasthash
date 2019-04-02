@@ -1,5 +1,7 @@
 package fnv1a
 
+import "unsafe"
+
 const (
 	// FNV-1a
 	offset32 = uint32(2166136261)
@@ -12,6 +14,11 @@ const (
 // HashString32 returns the hash of s.
 func HashString32(s string) uint32 {
 	return AddString32(Init32, s)
+}
+
+// HashBytes32 returns the hash of u.
+func HashBytes32(b []byte) uint32 {
+	return AddBytes32(Init32, b)
 }
 
 // HashUint32 returns the hash of u.
@@ -41,6 +48,11 @@ func AddString32(h uint32, s string) uint32 {
 	}
 
 	return h
+}
+
+// AddBytes32 adds the hash of b to the precomputed hash value h.
+func AddBytes32(h uint32, b []byte) uint32 {
+	return AddString32(h, *(*string)(unsafe.Pointer(&b)))
 }
 
 // AddUint32 adds the hash value of the 8 bytes of u to h.

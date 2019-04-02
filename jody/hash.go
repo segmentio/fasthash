@@ -30,6 +30,11 @@ func HashString64(s string) uint64 {
 	return AddString64(Init64, s)
 }
 
+// HashBytes64 returns the hash of u.
+func HashBytes64(b []byte) uint64 {
+	return AddBytes64(Init64, b)
+}
+
 // HashUint64 returns the hash of u.
 func HashUint64(u uint64) uint64 {
 	return AddUint64(Init64, u)
@@ -107,6 +112,11 @@ func AddString64(h uint64, s string) uint64 {
 	}
 
 	return h
+}
+
+// AddBytes64 adds the hash of b to the precomputed hash value h.
+func AddBytes64(h uint64, b []byte) uint64 {
+	return AddString64(h, *(*string)(unsafe.Pointer(&b)))
 }
 
 // AddUint64 adds the hash value of the 8 bytes of u to h.
