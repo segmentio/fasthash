@@ -1,7 +1,5 @@
 package fnv1
 
-import "unsafe"
-
 const (
 	// FNV-1
 	offset64 = uint64(14695981039346656037)
@@ -63,7 +61,37 @@ func AddString64(h uint64, s string) uint64 {
 
 // AddBytes64 adds the hash of b to the precomputed hash value h.
 func AddBytes64(h uint64, b []byte) uint64 {
-	return AddString64(h, *(*string)(unsafe.Pointer(&b)))
+	for len(b) >= 8 {
+		h = (h * prime64) ^ uint64(b[0])
+		h = (h * prime64) ^ uint64(b[1])
+		h = (h * prime64) ^ uint64(b[2])
+		h = (h * prime64) ^ uint64(b[3])
+		h = (h * prime64) ^ uint64(b[4])
+		h = (h * prime64) ^ uint64(b[5])
+		h = (h * prime64) ^ uint64(b[6])
+		h = (h * prime64) ^ uint64(b[7])
+		b = b[8:]
+	}
+
+	if len(b) >= 4 {
+		h = (h * prime64) ^ uint64(b[0])
+		h = (h * prime64) ^ uint64(b[1])
+		h = (h * prime64) ^ uint64(b[2])
+		h = (h * prime64) ^ uint64(b[3])
+		b = b[4:]
+	}
+
+	if len(b) >= 2 {
+		h = (h * prime64) ^ uint64(b[0])
+		h = (h * prime64) ^ uint64(b[1])
+		b = b[2:]
+	}
+
+	if len(b) > 0 {
+		h = (h * prime64) ^ uint64(b[0])
+	}
+
+	return h
 }
 
 // AddUint64 adds the hash value of the 8 bytes of u to h.
