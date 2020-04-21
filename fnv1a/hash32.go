@@ -28,23 +28,34 @@ func HashUint32(u uint32) uint32 {
 
 // AddString32 adds the hash of s to the precomputed hash value h.
 func AddString32(h uint32, s string) uint32 {
-	i := 0
-	n := (len(s) / 8) * 8
-
-	for i != n {
-		h = (h ^ uint32(s[i])) * prime32
-		h = (h ^ uint32(s[i+1])) * prime32
-		h = (h ^ uint32(s[i+2])) * prime32
-		h = (h ^ uint32(s[i+3])) * prime32
-		h = (h ^ uint32(s[i+4])) * prime32
-		h = (h ^ uint32(s[i+5])) * prime32
-		h = (h ^ uint32(s[i+6])) * prime32
-		h = (h ^ uint32(s[i+7])) * prime32
-		i += 8
+	for len(s) >= 8 {
+		h = (h ^ uint32(s[0])) * prime32
+		h = (h ^ uint32(s[1])) * prime32
+		h = (h ^ uint32(s[2])) * prime32
+		h = (h ^ uint32(s[3])) * prime32
+		h = (h ^ uint32(s[4])) * prime32
+		h = (h ^ uint32(s[5])) * prime32
+		h = (h ^ uint32(s[6])) * prime32
+		h = (h ^ uint32(s[7])) * prime32
+		s = s[8:]
 	}
 
-	for _, c := range s[i:] {
-		h = (h ^ uint32(c)) * prime32
+	if len(s) >= 4 {
+		h = (h ^ uint32(s[0])) * prime32
+		h = (h ^ uint32(s[1])) * prime32
+		h = (h ^ uint32(s[2])) * prime32
+		h = (h ^ uint32(s[3])) * prime32
+		s = s[4:]
+	}
+
+	if len(s) >= 2 {
+		h = (h ^ uint32(s[0])) * prime32
+		h = (h ^ uint32(s[1])) * prime32
+		s = s[2:]
+	}
+
+	if len(s) > 0 {
+		h = (h ^ uint32(s[0])) * prime32
 	}
 
 	return h

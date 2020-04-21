@@ -22,6 +22,8 @@ func TestHash64(t *testing.T) {
 			return 0x60be57b5a53eb1c7
 		case "DAB45194-42CC-4106-AB9F-2447FA4D35C2":
 			return 0x587861d2b41e1997
+		case "你好吗":
+			return 0x944cd5c16171eca3
 		default:
 			panic("test not implemented: " + s)
 		}

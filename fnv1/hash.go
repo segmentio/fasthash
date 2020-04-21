@@ -28,24 +28,34 @@ func HashUint64(u uint64) uint64 {
 
 // AddString64 adds the hash of s to the precomputed hash value h.
 func AddString64(h uint64, s string) uint64 {
-	i := 0
-	n := (len(s) / 8) * 8
-
-	for i != n {
-		h = (h * prime64) ^ uint64(s[i])
-		h = (h * prime64) ^ uint64(s[i+1])
-		h = (h * prime64) ^ uint64(s[i+2])
-		h = (h * prime64) ^ uint64(s[i+3])
-		h = (h * prime64) ^ uint64(s[i+4])
-		h = (h * prime64) ^ uint64(s[i+5])
-		h = (h * prime64) ^ uint64(s[i+6])
-		h = (h * prime64) ^ uint64(s[i+7])
-
-		i += 8
+	for len(s) >= 8 {
+		h = (h * prime64) ^ uint64(s[0])
+		h = (h * prime64) ^ uint64(s[1])
+		h = (h * prime64) ^ uint64(s[2])
+		h = (h * prime64) ^ uint64(s[3])
+		h = (h * prime64) ^ uint64(s[4])
+		h = (h * prime64) ^ uint64(s[5])
+		h = (h * prime64) ^ uint64(s[6])
+		h = (h * prime64) ^ uint64(s[7])
+		s = s[8:]
 	}
 
-	for _, c := range s[i:] {
-		h = (h * prime64) ^ uint64(c)
+	if len(s) >= 4 {
+		h = (h * prime64) ^ uint64(s[0])
+		h = (h * prime64) ^ uint64(s[1])
+		h = (h * prime64) ^ uint64(s[2])
+		h = (h * prime64) ^ uint64(s[3])
+		s = s[4:]
+	}
+
+	if len(s) >= 2 {
+		h = (h * prime64) ^ uint64(s[0])
+		h = (h * prime64) ^ uint64(s[1])
+		s = s[2:]
+	}
+
+	if len(s) > 0 {
+		h = (h * prime64) ^ uint64(s[0])
 	}
 
 	return h

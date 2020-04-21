@@ -1,12 +1,16 @@
 package fasthashtest
 
-import "testing"
+import (
+	"fmt"
+	"strings"
+	"testing"
+)
 
 // TestHashString64 is the implementation of a test suite to verify the
 // behavior of a hashing algorithm.
 func TestHashString64(t *testing.T, name string, reference func(string) uint64, algorithm func(string) uint64) {
 	t.Run(name, func(t *testing.T) {
-		for _, s := range [...]string{"", "A", "Hello World!", "DAB45194-42CC-4106-AB9F-2447FA4D35C2"} {
+		for _, s := range [...]string{"", "A", "Hello World!", "DAB45194-42CC-4106-AB9F-2447FA4D35C2", "你好吗"} {
 			t.Run(s, func(t *testing.T) {
 				if reference == nil {
 					algorithm(s)
@@ -70,16 +74,24 @@ func BenchmarkHashString64(b *testing.B, name string, reference func(string) uin
 		if reference != nil {
 			b.Run("reference", func(b *testing.B) { benchmark(b, reference) })
 		}
-		b.Run("algorithm", func(b *testing.B) { benchmark(b, algorithm) })
+		b.Run("optimized", func(b *testing.B) { benchmark(b, algorithm) })
 	})
 }
 
+var benchmarkStrings = [...]string{
+	"asdf",
+	"hello world",
+	"DAB45194-42CC-4106-AB9F-2447FA4D35C2",
+	strings.Repeat("1234567890", 100),
+}
+
 func benchmark(b *testing.B, hash func(string) uint64) {
-	const uuid = "DAB45194-42CC-4106-AB9F-2447FA4D35C2"
-
-	for i := 0; i != b.N; i++ {
-		hash(uuid)
+	for _, s := range benchmarkStrings {
+		b.Run(fmt.Sprintf("strlen=%d", len(s)), func(b *testing.B) {
+			for i := 0; i != b.N; i++ {
+				hash(s)
+			}
+			b.SetBytes(int64(len(s)))
+		})
 	}
-
-	b.SetBytes(int64(len(uuid)))
 }
