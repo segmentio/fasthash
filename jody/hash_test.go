@@ -29,6 +29,10 @@ func TestHash64(t *testing.T) {
 		}
 	}
 
+	referenceByte64 := func(b []byte) uint64 {
+		return referenceString64(string(b))
+	}
+
 	referenceUint64 := func(u uint64) uint64 {
 		if u != 42 {
 			panic(fmt.Sprint("test not implemented:", u))
@@ -37,6 +41,7 @@ func TestHash64(t *testing.T) {
 	}
 
 	fasthashtest.TestHashString64(t, "jody", referenceString64, HashString64)
+	fasthashtest.TestHashBytes64(t, "jody", referenceByte64, HashBytes64)
 	fasthashtest.TestHashUint64(t, "jody", referenceUint64, HashUint64)
 }
 

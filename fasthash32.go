@@ -14,6 +14,15 @@ func HashString32(f func() hash.Hash32) func(string) uint32 {
 	}
 }
 
+// HashBytes32 makes a hashing function from the hashing algorithm returned by f.
+func HashBytes32(f func() hash.Hash32) func([]byte) uint32 {
+	return func(s []byte) uint32 {
+		h := f()
+		h.Write(s)
+		return h.Sum32()
+	}
+}
+
 // HashUint32 makes a hashing function from the hashing algorithm return by f.
 func HashUint32(f func() hash.Hash32) func(uint32) uint32 {
 	return func(u uint32) uint32 {

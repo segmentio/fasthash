@@ -10,6 +10,7 @@ import (
 
 func TestHash32(t *testing.T) {
 	fasthashtest.TestHashString32(t, "fnv1a", fasthash.HashString32(fnv.New32a), HashString32)
+	fasthashtest.TestHashBytes32(t, "fnv1a", fasthash.HashBytes32(fnv.New32a), HashBytes32)
 	fasthashtest.TestHashUint32(t, "fnv1a", fasthash.HashUint32(fnv.New32a), HashUint32)
 }
 

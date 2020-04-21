@@ -14,6 +14,11 @@ func HashString32(s string) uint32 {
 	return AddString32(Init32, s)
 }
 
+// HashBytes32 returns the hash of u.
+func HashBytes32(b []byte) uint32 {
+	return AddBytes32(Init32, b)
+}
+
 // HashUint32 returns the hash of u.
 func HashUint32(u uint32) uint32 {
 	return AddUint32(Init32, u)
@@ -49,6 +54,41 @@ func AddString32(h uint32, s string) uint32 {
 
 	if len(s) > 0 {
 		h = (h * prime32) ^ uint32(s[0])
+	}
+
+	return h
+}
+
+// AddBytes32 adds the hash of b to the precomputed hash value h.
+func AddBytes32(h uint32, b []byte) uint32 {
+	for len(b) >= 8 {
+		h = (h * prime32) ^ uint32(b[0])
+		h = (h * prime32) ^ uint32(b[1])
+		h = (h * prime32) ^ uint32(b[2])
+		h = (h * prime32) ^ uint32(b[3])
+		h = (h * prime32) ^ uint32(b[4])
+		h = (h * prime32) ^ uint32(b[5])
+		h = (h * prime32) ^ uint32(b[6])
+		h = (h * prime32) ^ uint32(b[7])
+		b = b[8:]
+	}
+
+	if len(b) >= 4 {
+		h = (h * prime32) ^ uint32(b[0])
+		h = (h * prime32) ^ uint32(b[1])
+		h = (h * prime32) ^ uint32(b[2])
+		h = (h * prime32) ^ uint32(b[3])
+		b = b[4:]
+	}
+
+	if len(b) >= 2 {
+		h = (h * prime32) ^ uint32(b[0])
+		h = (h * prime32) ^ uint32(b[1])
+		b = b[2:]
+	}
+
+	if len(b) > 0 {
+		h = (h * prime32) ^ uint32(b[0])
 	}
 
 	return h
