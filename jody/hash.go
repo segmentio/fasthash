@@ -98,7 +98,7 @@ func AddString64(h uint64, s string) uint64 {
 
 	if n := (r.Len & 7); n != 0 {
 		c := constant & mask64[n]
-		var v uint64
+		v := uint64(0)
 		off := uint(0)
 		if 0 != (n & 4) {
 			v += uint64(*(*uint32)(p))
