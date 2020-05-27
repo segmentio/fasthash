@@ -97,9 +97,22 @@ func AddString64(h uint64, s string) uint64 {
 	}
 
 	if n := (r.Len & 7); n != 0 {
-		m := mask64[n]
-		c := constant & m
-		v := *(*uint64)(p) & m // risk of segfault here?
+		c := constant & mask64[n]
+		var v uint64
+		off := uint(0)
+		if 0 != (n & 4) {
+			v += uint64(*(*uint32)(p))
+			off += 32
+			p = unsafe.Pointer(uintptr(p) + 4)
+		}
+		if 0 != (n & 2) {
+			v += uint64(*(*uint16)(p)) << off
+			off += 16
+			p = unsafe.Pointer(uintptr(p) + 2)
+		}
+		if 0 != (n & 1) {
+			v += uint64(*(*uint8)(p)) << off
+		}
 
 		h = h + v + c
 		h = (h<<shift | h>>(64-shift)) ^ v
