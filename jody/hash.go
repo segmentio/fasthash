@@ -25,6 +25,13 @@ var mask64 = [...]uint64{
 	0xffffffffffffffff,
 }
 
+func accumulate(data, acc, cons uint64) uint64 {
+	acc = acc + data + cons
+	acc = (acc<<shift | acc>>(64-shift)) ^ data
+	acc = ((acc<<shift | acc>>(64-shift)) ^ cons) + data
+	return acc
+}
+
 // HashString64 returns the hash of s.
 func HashString64(s string) uint64 {
 	return AddString64(Init64, s)
@@ -88,43 +95,44 @@ func AddString64(h uint64, s string) uint64 {
 		return hash;
 	*/
 
-	r := *(*reflect.StringHeader)(unsafe.Pointer(&s))
 	p := unsafe.Pointer((*reflect.StringHeader)(unsafe.Pointer(&s)).Data)
+	dataLen := len(s)
 
-	for n := r.Len / 8; n != 0; n-- {
+	for dataLen > 8 {
 		v := *(*uint64)(p)
-
-		h = h + v + constant
-		h = (h<<shift | h>>(64-shift)) ^ v
-		h = ((h<<shift | h>>(64-shift)) ^ constant) + v
-
+		h = accumulate(v, h, constant)
 		p = unsafe.Pointer(uintptr(p) + 8)
+		dataLen -= 8
 	}
 
-	if n := (r.Len & 7); n != 0 {
-		c := constant & mask64[n]
-		v := uint64(0)
-		off := uint(0)
-		if 0 != (n & 4) {
-			v += uint64(*(*uint32)(p))
-			off += 32
-			p = unsafe.Pointer(uintptr(p) + 4)
-		}
-		if 0 != (n & 2) {
-			v += uint64(*(*uint16)(p)) << off
-			off += 16
-			p = unsafe.Pointer(uintptr(p) + 2)
-		}
-		if 0 != (n & 1) {
-			v += uint64(*(*uint8)(p)) << off
-		}
-
-		h = h + v + c
-		h = (h<<shift | h>>(64-shift)) ^ v
-		h = ((h<<shift | h>>(64-shift)) ^ c) + v
+	if dataLen == 8 {
+		v := *(*uint64)(p)
+		return accumulate(v, h, constant)
 	}
 
-	return h
+	if dataLen == 0 {
+		return h
+	}
+
+	// now we have a remainder 1 <= r.Len <= 7
+
+	off := uintptr(0)
+	v := uint64(0)
+	if 0 != dataLen&4 {
+		v += uint64(*(*uint32)(unsafe.Pointer(uintptr(p) + off)))
+		off += 4
+	}
+
+	if 0 != dataLen&2 {
+		v += uint64(*(*uint16)(unsafe.Pointer(uintptr(p) + off)))
+		off += 2
+	}
+
+	if 0 != dataLen&1 {
+		v += uint64(*(*uint8)(unsafe.Pointer(uintptr(p) + off)))
+	}
+
+	return accumulate(v, h, constant&mask64[dataLen])
 }
 
 // AddBytes64 adds the hash of b to the precomputed hash value h.
@@ -134,8 +142,5 @@ func AddBytes64(h uint64, b []byte) uint64 {
 
 // AddUint64 adds the hash value of the 8 bytes of u to h.
 func AddUint64(h uint64, u uint64) uint64 {
-	h = h + u + constant
-	h = (h<<shift | h>>(64-shift)) ^ u
-	h = ((h<<shift | h>>(64-shift)) ^ constant) + u
-	return h
+	return accumulate(u, h, constant)
 }
