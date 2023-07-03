@@ -1,6 +1,9 @@
 # fasthash [![CircleCI](https://circleci.com/gh/segmentio/fasthash.svg?style=shield)](https://circleci.com/gh/segmentio/fasthash) [![Go Report Card](https://goreportcard.com/badge/github.com/segmentio/fasthash)](https://goreportcard.com/report/github.com/segmentio/fasthash) [![GoDoc](https://godoc.org/github.com/segmentio/fasthash?status.svg)](https://godoc.org/github.com/segmentio/fasthash)
 Go package porting the standard hashing algorithms to a more efficient implementation.
 
+> **Note**  
+> Segment has paused maintenance on this project, but may return it to an active status in the future. Issues and pull requests from external contributors are not being considered, although internal contributions may appear from time to time. The project remains available under its open source license for anyone to use.
+
 ## Motivations
 
 Go has great support for hashing algorithms in the standard library, but the
