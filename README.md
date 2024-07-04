@@ -13,7 +13,7 @@ to those require dynamic memory allocations. Hashing a string typically requires
 slice.
 
 This package attempts to solve this issue by exposing functions that implement
-string hashing algorithms and don't require dynamic memory alloations.
+string hashing algorithms and don't require dynamic memory allocations.
 
 ## Testing
 
